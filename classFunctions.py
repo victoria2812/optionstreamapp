@@ -520,15 +520,15 @@ class StreamlitApp:
                 st.write("Underlying Data:")
                 st.dataframe(data.udlData)
 
-        if st.button("Insert Data into Excel"):
-            if isOpt:
-                data = dataRequest(ticker, isOpt)
-                data.excel_generator()
-                st.success("Excel File Correctly Loaded.")
-            else:
-                data = dataRequest(ticker, isOpt, start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d'))
-                data.excel_generator()
-                st.success("Excel File Correctly Loaded.")
+        #if st.button("Insert Data into Excel"):
+            #if isOpt:
+                #data = dataRequest(ticker, isOpt)
+                #data.excel_generator()
+                #st.success("Excel File Correctly Loaded.")
+           # else:
+                #data = dataRequest(ticker, isOpt, start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d'))
+               # data.excel_generator()
+                #st.success("Excel File Correctly Loaded.")
 
     def backtesting_page(self):
         st.title(" Backtesting")
