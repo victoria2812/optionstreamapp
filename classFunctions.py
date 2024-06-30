@@ -25,7 +25,7 @@ class dataRequest :
         self.spotPrice = yf.download(ticker, period="1d")['Close'].iloc[-1]
 
         if self.isOpt :
-            self.fileName = os.path.join('/mount/src/optionstreamapp/devoirOptions', 'options_data_')
+            self.fileName = os.path.join('devoirOptions', 'options_data_')
             self.todayDate = datetime.today().strftime('%Y-%m-%d')
             self.calls,self.puts = self.get_option_data()
         else:
@@ -34,7 +34,7 @@ class dataRequest :
 
             self.startDate= startDate
             self.endDate = endDate
-            self.fileName = os.path.join('/mount/src/optionstreamapp/devoirOptions', 'data_underlying_')
+            self.fileName = os.path.join('devoirOptions', 'data_underlying_')
             self.udlData = self.get_underlying_data(self.startDate,self.endDate)
 
         self.generatedFileName = self.file_name_generator()
