@@ -443,7 +443,7 @@ class ModelRandomForest:
                 self.testingSample['Y_toPredict'] == self.testingSample['Y_prediction']
         )
 
-        fig = px.scatter(
+        fig = px.bar(
             self.testingSample,
             x='Y_toPredict',
             y='Y_prediction',
@@ -470,7 +470,8 @@ class ModelRandomForest:
             importance,
             x='value',
             y='feature',
-            orientation='h'
+            orientation='h',
+            color = 'feature'
         )
         self.importance_fig = fig
 
@@ -525,9 +526,9 @@ class StreamlitApp:
                 #data = dataRequest(ticker, isOpt)
                 #data.excel_generator()
                 #st.success("Excel File Correctly Loaded.")
-           # else:
+            #else:
                 #data = dataRequest(ticker, isOpt, start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d'))
-               # data.excel_generator()
+                #data.excel_generator()
                 #st.success("Excel File Correctly Loaded.")
 
     def backtesting_page(self):
@@ -536,10 +537,10 @@ class StreamlitApp:
         st.write("Perform backtesting on Call-Spread Strategy ")
         ticker = st.text_input("Ticker Symbol", "^SPX")
         start_date = st.date_input("Start Date", datetime(2024, 4, 15))
-        end_date = st.date_input("End Date", datetime(2024, 6, 5))
-        time_to_maturity = st.number_input("Time to Maturity (days)", min_value=1, value=30)
-        strike1 = st.number_input("Strike 1", min_value=5, value=100,)
-        strike2 = st.number_input("Strike 2", min_value=5, value=105)
+        end_date = st.date_input("End Date", datetime(2024, 6, 29))
+        time_to_maturity = st.number_input("Time to Maturity (days)", min_value=1, value=100)
+        strike1 = st.number_input("Strike 1", min_value=5, value=4500,step=5)
+        strike2 = st.number_input("Strike 2", min_value=5, value=5000,step=5)
         is_long = st.radio("Is Long Position?", (True, False))
 
         if st.button("Run Backtest"):
@@ -616,7 +617,7 @@ class StreamlitApp:
     def volatility_surface_page(self):
         st.title("Volatility Surface S&P 500 (^SPX) :")
         underlying = "^SPX"
-        date = st.date_input("Date")
+        date = st.date_input("Date",datetime(2024, 6, 5))
         min_maturity ,max_maturity = st.slider("Select days to Maturity Range ",min_value=1,max_value=720,value=(7,360))
         min_moneyness,max_moneyness = st.slider("Select moneyness Range",min_value= -1.0,max_value= 1.0,value=(-0.2,0.2))
         current_directory = os.getcwd()
@@ -633,7 +634,7 @@ class StreamlitApp:
         st.write("decision factors implied Vol / log moneyness / time to maturity")
         ticker = st.text_input("Ticker Symbol", "^SPX")
         start_date = st.date_input("Start Date", datetime(2024, 4, 15))
-        end_date = st.date_input("End Date", datetime(2024, 6, 5))
+        end_date = st.date_input("End Date", datetime(2024, 6, 29))
         number_of_threes = st.slider("select estimators number (Threes)",min_value=10,max_value = 100,value=50)
         test_size  = st.slider("select Training Proportion",min_value=0.5,max_value=0.9,value=0.7)
         MDL = ModelRandomForest(startDate=start_date, endDate=end_date, udl=ticker, nEstimator=number_of_threes,
@@ -654,9 +655,8 @@ class StreamlitApp:
             MDL.plot_predictions()
             MDL.plot_feature_importance()
 
-
             st.title("Model Results:")
-            st.write(str(pd.DataFrame([MDL.evaluate_model()])))
+            st.write(pd.DataFrame([MDL.evaluate_model()]))
             st.write("Prediction Plot:")
             st.plotly_chart(MDL.prediction_fig)
 
